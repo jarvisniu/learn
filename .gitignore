@@ -1,0 +1,15 @@
+# os
+.DS_Store
+
+# editor
+.idea/
+
+# projects
+.cache/
+.nuxt/
+dist/
+node_modules/
+.env
+package-lock.json
+yarn.lock
+yarn-error.log
