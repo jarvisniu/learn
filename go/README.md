@@ -1,5 +1,7 @@
 # go
 
+> Simple, reliable, and efficient programming language
+
 <!-- Source:  -->
 
 ## Links
