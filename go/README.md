@@ -1,5 +1,13 @@
 # go
 
+<!-- Source:  -->
+
+## Links
+
+Homepage: https://golang.org/
+Docs: https://golang.org/doc/
+GitHub: https://github.com/golang/go
+
 ## Run
 
 ```sh
