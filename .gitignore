@@ -14,5 +14,10 @@ package-lock.json
 yarn.lock
 yarn-error.log
 
+# lwjgl
 lwjgl/**/*.class
 lwjgl/lib/
+
+# dotnet-core
+dotnet-core/**/bin
+dotnet-core/**/obj
