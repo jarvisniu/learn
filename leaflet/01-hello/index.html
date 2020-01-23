@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.bootcss.com/leaflet/1.5.1/leaflet.css"
+    />
+    <script src="https://cdn.bootcss.com/leaflet/1.5.1/leaflet.js"></script>
+    <style>
+      body {
+        margin: 0;
+      }
+      #map {
+        width: 100%;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      var map = L.map('map', {
+        center: [40.0023, 116.3195],
+        zoom: 13,
+      })
+
+      L.tileLayer('http://mt1.google.cn/vt/lyrs=m&hl=zh&x={x}&y={y}&z={z}', {
+        attribution: 'Google Maps',
+        maxZoom: 18,
+      }).addTo(map)
+    </script>
+  </body>
+</html>

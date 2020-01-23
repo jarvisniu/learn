@@ -1,3 +1,3 @@
 # learn
 
-learning notes
+My learning notes, mostly hello world programs.
