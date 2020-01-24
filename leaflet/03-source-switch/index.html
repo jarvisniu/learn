@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.bootcss.com/leaflet/1.5.1/leaflet.css"
+    />
+    <script src="https://cdn.bootcss.com/leaflet/1.5.1/leaflet.js"></script>
+    <style>
+      body {
+        margin: 0;
+      }
+      #app {
+        height: 100vh;
+        display: flex;
+      }
+      #map {
+        flex: 1;
+        height: 100%;
+      }
+      .control {
+        box-sizing: border-box;
+        width: 200px;
+        height: 100%;
+        padding: 10px;
+        border-left: solid 1px silver;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="map"></div>
+      <div class="control">
+        <div>Source:</div>
+        <div>
+          <label>
+            <input type="radio" name="src" checked
+              onclick="setMapSource('osm')">
+            <span>OSM</span>
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="radio" name="src"
+              onclick="setMapSource('google')">
+            <span>Google</span>
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="radio" name="src"
+              onclick="setMapSource('google-s')">
+            <span>Google Satellite</span>
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="radio" name="src"
+              onclick="setMapSource('open-cycle')">
+            <span>OpenCycleMap</span>
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="radio" name="src"
+              onclick="setMapSource('tian')">
+            <span>Tian</span>
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="radio" name="src"
+              onclick="setMapSource('tian-s')">
+            <span>Tian Satellite</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <script>
+      var map = L.map('map', {
+        center: [40.0023, 116.3195],
+        zoom: 13,
+      })
+
+      // OSM
+      var CanvasLayer = L.GridLayer.extend({
+        createTile: function(coords, done) {
+          var error
+          var tile = L.DomUtil.create('canvas', 'leaflet-tile')
+          var size = this.getTileSize()
+          tile.width = size.x
+          tile.height = size.y
+          let image = new Image()
+          image.src = `http://a.tile.openstreetmap.org/${coords.z}/${coords.x}/${coords.y}.png`
+          image.onload = function() {
+            var ctx = tile.getContext('2d')
+            ctx.drawImage(image, 0, 0, 256, 256)
+            done(error, tile)
+          }
+          return tile
+        },
+      })
+      let osmLayer = new CanvasLayer({
+        attribution: 'OpenStreetMap',
+      })
+
+      // Google
+      let googleLayer = L.tileLayer('http://mt1.google.cn/vt/lyrs=m&hl=zh&gl=en&x={x}&y={y}&z={z}', {
+        attribution: 'Google',
+      })
+
+      // Google Satellite
+      let googleSLayer = L.tileLayer('https://www.google.cn/maps/vt?lyrs=s@804&gl=cn&x={x}&y={y}&z={z}', {
+        attribution: 'Google',
+      })
+      let googleSLLayer = L.tileLayer('https://ditu.google.cn/maps/vt?pb=!1m5!1m4!1i{z}!2i{x}!3i{y}!4i256!2m3!1e0!2sm!3i413113259!3m12!2szh-CN!3sCN!5e18!12m4!1e68!2m2!1sset!2sRoadmapSatellite!12m3!1e37!2m1!1ssmartmaps!4e0!23i1301875&token=59227', {
+        attribution: 'Google',
+      })
+
+      // OpenCycle
+      let openCycleLayer = L.tileLayer('https://a.tile.thunderforest.com/cycle/{z}/{x}/{y}@2x.png?apikey=7c352c8ff1244dd8b732e349e0b0fe8d', {
+        attribution: 'OpenCycle',
+      })
+
+      // Tian
+      let tianLayer = L.tileLayer('https://t3.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}&tk=fb1bfb9e06cd7681813a42f4c934e1ea', {
+        attribution: 'Tian',
+      })
+      let tianLLayer = L.tileLayer('https://t6.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}&tk=fb1bfb9e06cd7681813a42f4c934e1ea', {
+        attribution: 'Tian',
+      })
+      let tianSLayer = L.tileLayer('https://t4.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}&tk=fb1bfb9e06cd', {
+        attribution: 'Tian',
+      })
+      let tianSLLayer = L.tileLayer('https://t0.tianditu.gov.cn/cia_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cia&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}&tk=fb1bfb9e06cd', {
+        attribution: 'Tian',
+      })
+
+      function setMapSource(src) {
+        // console.log('setMapSource', src)
+
+        if (src !== 'osm') osmLayer.remove()
+        if (src !== 'google') googleLayer.remove()
+        if (src !== 'google-s') googleSLayer.remove()
+        if (src !== 'google-s') googleSLLayer.remove()
+        if (src !== 'open-cycle') openCycleLayer.remove()
+        if (src !== 'tian') tianSLayer.remove()
+        if (src !== 'tian') tianLayer.remove()
+        if (src !== 'tian') tianLLayer.remove()
+        if (src !== 'tian-s') tianSLayer.remove()
+        if (src !== 'tian-s') tianSLLayer.remove()
+
+        if (src === 'google') {
+          googleLayer.addTo(map)
+        } else if (src === 'google-s') {
+          googleSLayer.addTo(map)
+          googleSLLayer.addTo(map)
+        } else if (src === 'open-cycle') {
+          openCycleLayer.addTo(map)
+        } else if (src === 'tian') {
+          tianLayer.addTo(map)
+          tianLLayer.addTo(map)
+        } else if (src === 'tian-s') {
+          tianSLayer.addTo(map)
+          tianSLLayer.addTo(map)
+        } else if (src === 'open-cycle') {
+          openCycleLayer.addTo(map)
+        } else { // OSM
+          osmLayer.addTo(map)
+        }
+      }
+
+      setMapSource('osm')
+    </script>
+  </body>
+</html>

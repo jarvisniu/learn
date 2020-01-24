@@ -2,8 +2,6 @@
 
 > Simple, reliable, and efficient programming language
 
-<!-- Source:  -->
-
 ## Links
 
 Homepage: https://golang.org/

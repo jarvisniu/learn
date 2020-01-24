@@ -2,8 +2,6 @@
 
 > NextGen of NodeJS
 
-<!-- Source:  -->
-
 ## Links
 
 Homepage: https://deno.land/
