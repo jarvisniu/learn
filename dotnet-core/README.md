@@ -20,7 +20,6 @@ dotnet run
 ## New Project
 
 ```sh
-mkdir 02_hello
-cd 02_hello
-dotnet new console
+cd dotnet-core
+dotnet new console -o 02_hello
 ```
